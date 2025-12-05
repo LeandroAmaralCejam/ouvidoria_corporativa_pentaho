@@ -4,6 +4,7 @@
   <description/>
   <extended_description/>
   <job_version/>
+  <job_status>0</job_status>
   <directory>/</directory>
   <created_user>-</created_user>
   <created_date>2025/03/24 11:26:45.790</created_date>
@@ -327,7 +328,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:\github\prod\ouvidoria_corporativa_pentaho\pentaho\stage_1.ktr</filename>
+      <filename>C:\github\prod\ouvidoria_corporativa\pentaho\stage_1.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -366,7 +367,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:\github\prod\ouvidoria_corporativa_pentaho\pentaho\dm_1.ktr</filename>
+      <filename>C:\github\prod\ouvidoria_corporativa\pentaho\dm_1.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -405,7 +406,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:\github\prod\ouvidoria_corporativa_pentaho\pentaho\stage_2.ktr</filename>
+      <filename>C:\github\prod\ouvidoria_corporativa\pentaho\stage_2.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -444,7 +445,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:\github\prod\ouvidoria_corporativa_pentaho\pentaho\dw_1.ktr</filename>
+      <filename>C:\github\prod\ouvidoria_corporativa\pentaho\dw_1.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -483,7 +484,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:\github\prod\ouvidoria_corporativa_pentaho\pentaho\stamp_stage.ktr</filename>
+      <filename>C:\github\prod\ouvidoria_corporativa\pentaho\stamp_stage.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -522,7 +523,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:\github\prod\ouvidoria_corporativa_pentaho\pentaho\stamp_job.ktr</filename>
+      <filename>C:\github\prod\ouvidoria_corporativa\pentaho\stamp_job.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -561,7 +562,7 @@
       <attributes/>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>C:\github\prod\ouvidoria_corporativa_pentaho\pentaho\dw_pesquisa_resposta.ktr</filename>
+      <filename>C:\github\prod\ouvidoria_corporativa\pentaho\dw_pesquisa_resposta.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
