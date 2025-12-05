@@ -35,3 +35,81 @@ O processo extrai dados das seguintes tabelas e os carrega em suas respectivas t
 - **Atualização Completa (Full):** Trunca (limpa) a tabela de destino e recarrega todos os dados.
 - **Incremental:** Usa um lookup de `max_date` para buscar apenas registros criados ou modificados após a última carga bem-sucedida.
 
+## Consultas SQL Utilizadas
+
+### Extração de Manifestação (Incremental)
+```sql
+SELECT
+Id
+,Criado_Dt
+,Criado_Por
+,Alterado_Dt
+,Alterado_Por
+,IsAtivo
+,IsDeleted
+,Anonimo
+,Sigilo
+,CNPJ
+,RazaoSocial
+,NomeFantasia
+,CPF
+,DATE_FORMAT(DataNascimento, '%Y-%m-%d %H:%i:%s') AS DataNascimento
+,Nome
+,NomeSocial
+,Email
+,CEP
+,Endereco
+,Numero
+,Complemento
+,Bairro
+,CidadeId
+,Estado
+,Telefone
+,TelefoneContato
+,Celular
+,ManifestacaoDescricao
+,Evidencia
+,Providencia
+,Justificativa
+,TipoLocalEnvio
+,Status
+,DataOcorrencia
+,TipoAtendimentoManifestacaoId
+,EstabelecimentoId
+,EstabelecimentoEnvioId
+,EstabeleciomentoOcorrenciaId
+,Protocolo
+,EstadoEstab
+,MunicipioEstab
+,MidiaSocialId
+,GeneroId
+,DepartamentoId
+,TempoResposta
+,Avaliacao
+,PerfilManifestacaoId
+,ClassificaoManifestacaoId
+,MotivoManifestacaoId
+,IsTermo
+FROM cejam.Manifestacao
+WHERE id IS NOT NULL
+AND Alterado_Dt > ? -- Parâmetro injetado pelo passo de lookup
+```
+
+### Consultas Padrão (Carga Completa)
+Para a maioria das tabelas auxiliares, a consulta segue o padrão:
+```sql
+SELECT * FROM cejam.NomeDaTabela;
+```
+Exemplos:
+- `SELECT * FROM cejam.ClassificacaoManifestacao;`
+- `SELECT * FROM cejam.MotivoManifestacao;`
+- `SELECT * FROM cejam.PerfilManifestacao;`
+
+### Consultas de Lookup (Max Date)
+Utilizadas para determinar o ponto de corte da carga incremental.
+```sql
+SELECT MAX(Alterado_Dt) AS MAX_DATE FROM medicsys.oc.stg_manifestacao WHERE id IS NOT NULL
+```
+*(Similar para `stg_pesquisaestabelecimento` e `stg_pesquisaresposta`)*
+
+

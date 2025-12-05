@@ -30,3 +30,44 @@ Esta transformação final agrega os dados detalhados do DW em tabelas de resumo
 ## Propósito
 Estas tabelas são otimizadas para consumo direto pelo Power BI ou outras ferramentas de visualização, fornecendo totais mensais pré-agregados por várias dimensões.
 
+## Consulta SQL da Agregação
+
+### Agregação de Manifestações (`dm_Manifestacao`)
+A consulta utiliza CTEs para filtrar, transformar e agrupar os dados.
+
+```sql
+WITH E1 AS (
+    SELECT * FROM medicsys.oc.dw_Manifestacao
+    WHERE Id IS NOT NULL
+    -- Lógica de janela deslizante (últimos 3 meses)
+    AND Criado_Dt >= DATEADD(DAY, 1, EOMONTH(GETDATE(), -4)) 
+),
+E2 AS (
+    SELECT
+        Id,
+        CAST(CONCAT(LEFT(CAST(Criado_Dt AS DATE),8),'01') AS DATE) AS Data, -- Trunca para o dia 1 do mês
+        Protocolo,
+        TipoAtendimentoManifestacaoId,
+        EstabelecimentoId,
+        -- ... (seleção de dimensões)
+        1 as Total
+    FROM E1
+),
+E3 AS (
+    SELECT
+        Data,
+        TipoAtendimentoManifestacaoId,
+        PerfilManifestacaoId,
+        -- ...
+        SUM(Total) AS Total -- Contagem de manifestações
+    FROM E2
+    GROUP BY
+        Data,
+        TipoAtendimentoManifestacaoId,
+        PerfilManifestacaoId
+        -- ...
+)
+SELECT *, GETDATE() AS stamp FROM E3
+```
+
+

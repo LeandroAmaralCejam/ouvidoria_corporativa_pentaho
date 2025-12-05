@@ -31,12 +31,18 @@ O processo de ETL é dividido em estágios lógicos, cada um responsável por um
 - **Detalhes:** [Ver Documentação Técnica](docs/stage_2.md)
 
 ### 3. Transformação Data Warehouse (DW)
-- **Origem:** Área de Staging
-- **Destino:** Data Warehouse (`medicsys.oc`)
-- **Detalhes:** [Ver Documentação Técnica](docs/dw_1.md)
+O projeto mantém dois Data Warehouses distintos:
+- **[DW Principal (Corporativo)](docs/dw_1.md)**: Focado em manifestações e dados corporativos gerais.
+- **[DW Pesquisa Resposta](docs/dw_2.md)**: Focado especificamente nas respostas das pesquisas de satisfação.
 
 ### 4. Agregação Data Mart (DM)
 - **Origem:** Data Warehouse
 - **Destino:** Data Mart (Tabelas Agregadas)
-- **Detalhes:** [Ver Documentação Técnica](docs/dm_1.md)
+- **Detalhes:** [Ver Documentação Técnica (DM 1)](docs/dm_1.md)
+
+### 5. Processos de Controle (Stamps)
+O projeto utiliza um sistema de carimbos de tempo para controle de carga incremental:
+- **`stamp_stage`**: Captura o carimbo de data/hora diretamente da origem (MySQL), representando o momento da extração.
+- **`stamp_job`**: Gerencia o carimbo do projeto, copiando a referência do estágio para orquestrar a próxima carga incremental.
+
 

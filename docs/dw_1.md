@@ -29,3 +29,74 @@ O processo envolve ler das tabelas de Staging, aplicar operações de ordenaçã
     - A transformação lê 3 meses de histórico para `Manifestacao` para atualizar registros recentes enquanto mantém o histórico mais antigo constante, otimizando o desempenho.
     - *Nota: Existe uma lógica comentada para truncamento total vs atualizações de janela deslizante.*
 
+## Consultas SQL Utilizadas
+
+### Padronização de Perguntas (`dw_PerguntaPadrao`)
+Esta etapa utiliza uma consulta complexa com CTEs (`WITH`) para limpar e categorizar as perguntas do formulário.
+```sql
+WITH E1 AS (
+    SELECT
+        Id,
+        Pergunta,
+        CASE
+            WHEN Id in (94, 98, 143, ...) THEN 'Atendimento - Enfermagem?'
+            -- ... (múltiplos CASES para padronização)
+            ELSE Pergunta
+        END AS PerguntaPadronizado
+    FROM medicsys.oc.stg_perguntapadrao
+    WHERE id NOT IN ('131', ...) -- Exclusão de IDs legados
+),
+E2 AS (
+    SELECT
+        Id,
+        Pergunta,
+        PerguntaPadronizado,
+        CASE
+            WHEN PerguntaPadronizado LIKE 'Serviço%' THEN 'Serviço'
+            ELSE 'Atendimento'
+        END AS 'Categoria Pergunta',
+        -- ...
+    FROM E1
+)
+SELECT * FROM E2;
+```
+
+### Agrupamento de Motivos (`dw_MotivoManifestacao`)
+Agrupa motivos detalhados em categorias macro.
+```sql
+SELECT
+    Id,
+    MotivoManifestacaoDesc,
+    CASE 
+        WHEN Id IN (1, 2, 10, ...) THEN 'Comportamento inadequado do profissional'
+        WHEN Id IN (3, 4) THEN 'Elogio'
+        -- ...
+    END AS MotivoGrupo
+FROM medicsys.oc.stg_MotivoManifestacao
+WHERE Id IS NOT NULL
+```
+
+### Dados Regionais (`dw_Regionais_MedicSys`)
+Realiza um join com a tabela de estabelecimentos para determinar o tipo de contrato.
+```sql
+SELECT
+    A.Unidade,
+    A.[Nível de Atenção],
+    A.Município,
+    A.[Tipo de Unidade],
+    A.Id_Medicsys,
+    A.Regional,
+    B.TipoContrato AS Tipo
+FROM medicsys.oc.stg_Regionais_MedicSys A
+LEFT JOIN (
+    SELECT id, 
+    CASE 
+        WHEN ContratoId IN (8, 11, ...) THEN 'Convenio'
+        WHEN ContratoId = 2 THEN 'Sede'
+        ELSE 'Contrato'
+    END AS TipoContrato
+    FROM medicsys.oc.stg_estabelecimento
+) B ON A.Id_Medicsys = B.id
+```
+
+
