@@ -14,7 +14,7 @@ git clone https://github.com/LeandroAmaralCejam/ouvidoria_corporativa.git C:\git
 ```
 
 > [!NOTE]
-> Certifique-se de que a pasta de destino `C:\github\prod\ouvidoria_corporativa` não exista antes de executar o comando de clone, ou esteja vazia.
+> Certifique-se de que a pasta de destino `C:\github\prod\ouvidoria_corporativa` esteja vazia, ou, não exista antes de executar o comando de clone.
 
 ## Arquitetura ETL
 
