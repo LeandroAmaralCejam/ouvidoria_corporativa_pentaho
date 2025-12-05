@@ -1,31 +1,32 @@
-# Stage 4: Data Mart (DM) Aggregation
+# Estágio 4: Agregação Data Mart (DM)
 
-This final transformation aggregates the detailed DW data into summary tables for reporting and dashboards.
+Esta transformação final agrega os dados detalhados do DW em tabelas de resumo para relatórios e dashboards.
 
-## Source
-- **Database:** SQL Server (`con_db_medicsys_cejam`)
-- **Schema:** `medicsys.oc` (DW tables)
+## Origem
+- **Banco de Dados:** SQL Server (`con_db_medicsys_cejam`)
+- **Schema:** `medicsys.oc` (Tabelas DW)
 
-## Destination
-- **Database:** SQL Server (`con_db_medicsys_cejam`)
-- **Schema:** `medicsys.oc` (DM tables)
+## Destino
+- **Banco de Dados:** SQL Server (`con_db_medicsys_cejam`)
+- **Schema:** `medicsys.oc` (Tabelas DM)
 
-## Transformations
-1. **Manifestacao Aggregation (`dm_Manifestacao`)**
-    - **Source:** `dw_Manifestacao`
-    - **Filter Logic:** Selects records created in the last 3 months (rolling window optimization).
-    - **Grouping Keys:**
-        - `Data` (normalized to the 1st of the month)
+## Transformações
+1. **Agregação Manifestação (`dm_Manifestacao`)**
+    - **Origem:** `dw_Manifestacao`
+    - **Lógica de Filtro:** Seleciona registros criados nos últimos 3 meses (janela deslizante).
+    - **Chaves de Agrupamento:**
+        - `Data` (normalizada para o dia 1 do mês)
         - `TipoAtendimentoManifestacaoId`
         - `PerfilManifestacaoId`
         - `ClassificaoManifestacaoId`
         - `MotivoManifestacaoId`
         - `EstabelecimentoTratado`
-    - **Metrics:** `Total` (Sum of count).
-    - **Output:** `dm_Manifestacao` table is updated with these aggregated snapshots.
+    - **Métricas:** `Total` (Soma da contagem).
+    - **Saída:** A tabela `dm_Manifestacao` é atualizada com esses snapshots agregados.
 
-2. **Melhorias Aggregation (`dm_melhorias`)**
-    - Similar logic applied for "Melhorias" (Improvements) if applicable, aggregating counts based on categorization.
+2. **Agregação Melhorias (`dm_melhorias`)**
+    - Lógica similar aplicada para "Melhorias" se aplicável, agregando contagens baseadas em categorização.
 
-## Purpose
-These tables are optimized for direct consumption by Power BI or other visualization tools, providing pre-aggregated monthly totals by various dimensions.
+## Propósito
+Estas tabelas são otimizadas para consumo direto pelo Power BI ou outras ferramentas de visualização, fornecendo totais mensais pré-agregados por várias dimensões.
+

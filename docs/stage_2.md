@@ -1,18 +1,18 @@
-# Stage 2: Extraction from Excel (Regionals)
+# Estágio 2: Extração de Excel (Regionais)
 
-This transformation extracts auxiliary regional classification data from a shared Excel file.
+Esta transformação extrai dados auxiliares de classificação regional de um arquivo Excel compartilhado.
 
-## Source
-- **Type:** Excel File (`.xlsx`)
-- **Path:** `G:\Drives compartilhados\INFORMAÇÃO\03. Dashboards\Institucional\Ouvidoria Corporativa\DIM_REGIONAIS _MEDICSYS\DIM_REGIONAIS_MEDICSYS.xlsx`
-- **Sheet:** `MedicSys`
+## Origem
+- **Tipo:** Arquivo Excel (`.xlsx`)
+- **Caminho:** `G:\Drives compartilhados\INFORMAÇÃO\03. Dashboards\Institucional\Ouvidoria Corporativa\DIM_REGIONAIS _MEDICSYS\DIM_REGIONAIS_MEDICSYS.xlsx`
+- **Planilha:** `MedicSys`
 
-## Destination
-- **Database:** SQL Server (`con_db_medicsys_cejam`)
+## Destino
+- **Banco de Dados:** SQL Server (`con_db_medicsys_cejam`)
 - **Schema:** `oc`
-- **Table:** `stg_Regionais_MedicSys`
+- **Tabela:** `stg_Regionais_MedicSys`
 
-## Fields Mapped
+## Campos Mapeados
 - `Unidade` -> `Unidade`
 - `Nível de Atenção` -> `Nível de Atenção`
 - `Município` -> `Município`
@@ -20,6 +20,7 @@ This transformation extracts auxiliary regional classification data from a share
 - `Id_Medicsys` -> `Id_Medicsys`
 - `Regional` -> `Regional`
 
-## Logic
-- **Truncate & Load:** The destination table (`stg_Regionais_MedicSys`) is truncated before inserting the rows from the Excel file (Full Refresh).
-- **Sorting:** Rows are sorted by `Id_Medicsys` before loading.
+## Lógica
+- **Truncar e Carregar:** A tabela de destino (`stg_Regionais_MedicSys`) é truncada (limpa) antes de inserir as linhas do arquivo Excel (Atualização Completa).
+- **Ordenação:** As linhas são ordenadas por `Id_Medicsys` antes do carregamento.
+

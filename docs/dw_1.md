@@ -1,30 +1,31 @@
-# Stage 3: Data Warehouse (DW) Transformation
+# Estágio 3: Transformação Data Warehouse (DW)
 
-This transformation takes the raw data from the Staging area, cleans it, and structures it for the Data Warehouse.
+Esta transformação recebe os dados brutos da área de Staging, limpa-os e estrutura-os para o Data Warehouse.
 
-## Source
-- **Database:** SQL Server (`con_db_medicsys_cejam`)
-- **Schema:** `oc` (Staging tables)
+## Origem
+- **Banco de Dados:** SQL Server (`con_db_medicsys_cejam`)
+- **Schema:** `oc` (Tabelas Staging)
 
-## Destination
-- **Database:** SQL Server (`con_db_medicsys_cejam`)
-- **Schema:** `medicsys.oc` (DW tables)
+## Destino
+- **Banco de Dados:** SQL Server (`con_db_medicsys_cejam`)
+- **Schema:** `medicsys.oc` (Tabelas DW)
 
-## ETL Process
-The process involves reading from the Staging tables, applying sort operations (required for some Pentaho steps or just for organization), and loading into `dw_` tables.
+## Processo ETL
+O processo envolve ler das tabelas de Staging, aplicar operações de ordenação (necessárias para alguns passos do Pentaho ou apenas para organização) e carregar nas tabelas `dw_`.
 
-| Staging Table | Target DW Table | Description |
+| Tabela Staging | Tabela DW de Destino | Descrição |
 | :--- | :--- | :--- |
-| `stage_PerguntaPadrao` | `dw_PerguntaPadrao` | Standard Questions |
-| `stage_perguntaresposta` | `dw_perguntaresposta` | QA pairs |
-| `stage_formulario` | `dw_formulario` | Forms |
-| `stage_ClassificacaoManifestacao` | `dw_ClassificacaoManifestacao` | Classifications |
-| `stage_MotivoManifestacao` | `dw_MotivoManifestacao` | Reasons |
-| `stage_Manifestacao` | `dw_Manifestacao` | Manifestations |
-| `stage_Regionais_MedicSys` | `dw_Regionais_MedicSys` | Regionals |
+| `stage_PerguntaPadrao` | `dw_PerguntaPadrao` | Perguntas Padrão |
+| `stage_perguntaresposta` | `dw_perguntaresposta` | Pares de Pergunta/Resposta |
+| `stage_formulario` | `dw_formulario` | Formulários |
+| `stage_ClassificacaoManifestacao` | `dw_ClassificacaoManifestacao` | Classificações |
+| `stage_MotivoManifestacao` | `dw_MotivoManifestacao` | Motivos |
+| `stage_Manifestacao` | `dw_Manifestacao` | Manifestações |
+| `stage_Regionais_MedicSys` | `dw_Regionais_MedicSys` | Regionais |
 
-## Key Logic
-- **Sorting:** All streams are sorted by their respective IDs (e.g., `Id`, `Id_Medicsys`) to ensure ordered insertion or to facilitate downstream merges/joins if needed.
-- **Manifestacao Handling:** 
-    - The transformation reads 3 months of history for `Manifestacao` to update recent records while maintaining older history constant, optimizing performance.
-    - *Note: There is a commented-out logic for full truncation vs sliding window updates.*
+## Lógica Principal
+- **Ordenação:** Todos os fluxos são ordenados por seus respectivos IDs (ex: `Id`, `Id_Medicsys`) para garantir inserção ordenada ou facilitar junções/merges futuros se necessário.
+- **Tratamento de Manifestação:**
+    - A transformação lê 3 meses de histórico para `Manifestacao` para atualizar registros recentes enquanto mantém o histórico mais antigo constante, otimizando o desempenho.
+    - *Nota: Existe uma lógica comentada para truncamento total vs atualizações de janela deslizante.*
+

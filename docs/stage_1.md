@@ -1,36 +1,37 @@
-# Stage 1: Extraction from Helper System (MySQL)
+# Estágio 1: Extração do Sistema Helper (MySQL)
 
-This transformation is responsible for extracting the raw data from the operational database (MySQL) and loading it into the Staging Area (SQL Server).
+Esta transformação é responsável por extrair os dados brutos do banco de dados operacional (MySQL) e carregá-los na Área de Staging (SQL Server).
 
-## Source System
-- **Database Type:** MySQL
+## Sistema de Origem
+- **Tipo de Banco de Dados:** MySQL
 - **Schema:** `cejam`
-- **Connection:** `con_mysql_medicsys`
+- **Conexão:** `con_mysql_medicsys`
 
-## Destination System (Staging)
-- **Database Type:** SQL Server
-- **Schema:** `oc` (implied Staging schema)
-- **Connection:** `con_db_medicsys_cejam`
+## Sistema de Destino (Staging)
+- **Tipo de Banco de Dados:** SQL Server
+- **Schema:** `oc` (schema implícito de Staging)
+- **Conexão:** `con_db_medicsys_cejam`
 
-## ETL Process
-The process extracts data from the following tables and loads them into their respective `stage_` tables. Some tables use an incremental load strategy based on dates, while others are full loads.
+## Processo ETL
+O processo extrai dados das seguintes tabelas e os carrega em suas respectivas tabelas `stage_`. Algumas tabelas usam uma estratégia de carga incremental baseada em datas, enquanto outras são cargas completas (full loads).
 
-| Source Table | Destination Table | Load Type | Description |
+| Tabela de Origem | Tabela de Destino | Tipo de Carga | Descrição |
 | :--- | :--- | :--- | :--- |
-| `ClassificacaoManifestacao` | `stage_ClassificacaoManifestacao` | Full | Classification types |
-| `Manifestacao` | `stage_Manifestacao` | Incremental | Main manifestation records |
-| `MotivoManifestacao` | `stage_MotivoManifestacao` | Full | Reasons for manifestations |
-| `PerfilManifestacao` | `stage_PerfilManifestacao` | Full | Profiles |
-| `TipoAtendimentoManifestacao` | `stage_TipoAtendimentoManifestacao` | Full | Types of attendance |
-| `formulario` | `stage_formulario` | Full | Forms definitions |
-| `formulariopergunta` | `stage_formulariopergunta` | Full | Questions in forms |
-| `formularioresposta` | `stage_formularioresposta` | Full | Answers in forms |
-| `estabelecimento` | `stage_estabelecimento` | Full | Establishments |
-| `perguntapadrao` | `stage_perguntapadrao` | Full | Standard questions |
-| `perguntaresposta` | `stage_perguntaresposta` | Full | Question answers |
-| `pesquisaresposta` | `stage_pesquisaresposta` | Incremental | Survey responses |
-| `pesquisaestabelecimento` | `stage_pesquisaestabelecimento` | Incremental | Survey establishments |
+| `ClassificacaoManifestacao` | `stage_ClassificacaoManifestacao` | Completa | Tipos de classificação |
+| `Manifestacao` | `stage_Manifestacao` | Incremental | Registros principais de manifestação |
+| `MotivoManifestacao` | `stage_MotivoManifestacao` | Completa | Motivos para manifestações |
+| `PerfilManifestacao` | `stage_PerfilManifestacao` | Completa | Perfis |
+| `TipoAtendimentoManifestacao` | `stage_TipoAtendimentoManifestacao` | Completa | Tipos de atendimento |
+| `formulario` | `stage_formulario` | Completa | Definições de formulários |
+| `formulariopergunta` | `stage_formulariopergunta` | Completa | Perguntas dos formulários |
+| `formularioresposta` | `stage_formularioresposta` | Completa | Respostas dos formulários |
+| `estabelecimento` | `stage_estabelecimento` | Completa | Estabelecimentos |
+| `perguntapadrao` | `stage_perguntapadrao` | Completa | Perguntas padrão |
+| `perguntaresposta` | `stage_perguntaresposta` | Completa | Respostas das perguntas |
+| `pesquisaresposta` | `stage_pesquisaresposta` | Incremental | Respostas de pesquisa |
+| `pesquisaestabelecimento` | `stage_pesquisaestabelecimento` | Incremental | Estabelecimentos de pesquisa |
 
-## Transformation Logic
-- **Full Refresh:** Truncates the destination table and reloads all data.
-- **Incremental:** Uses `max_date` lookup to only fetch records created or modified after the last successful load.
+## Lógica de Transformação
+- **Atualização Completa (Full):** Trunca (limpa) a tabela de destino e recarrega todos os dados.
+- **Incremental:** Usa um lookup de `max_date` para buscar apenas registros criados ou modificados após a última carga bem-sucedida.
+
