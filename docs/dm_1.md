@@ -11,119 +11,23 @@ Esta transformação final agrega os dados detalhados do DW em tabelas de resumo
 - **Schema:** `medicsys.oc` (Tabelas DM)
 
 ## Transformações
-1. **Agregação Manifestação (`dm_Manifestacao`)**
-    - **Origem:** `dw_Manifestacao`
-    - **Lógica de Filtro:** Seleciona registros criados nos últimos 3 meses (janela deslizante).
-    - **Chaves de Agrupamento:**
-        - `Data` (normalizada para o dia 1 do mês)
-        - `TipoAtendimentoManifestacaoId`
-        - `PerfilManifestacaoId`
-        - `ClassificaoManifestacaoId`
-        - `MotivoManifestacaoId`
-        - `EstabelecimentoTratado`
-    - **Métricas:** `Total` (Soma da contagem).
-    - **Saída:** A tabela `dm_Manifestacao` é atualizada com esses snapshots agregados.
+## Transformações Detalhadas
 
-2. **Agregação Melhorias (`dm_melhorias`)**
-    - Lógica similar aplicada para "Melhorias" se aplicável, agregando contagens baseadas em categorização.
+### 1. DM Manifestação
+O processamento de Manifestações no Data Mart ocorre em duas etapas principais: limpeza (truncate) da janela deslizante e carga agregada.
 
-## Propósito
-Estas tabelas são otimizadas para consumo direto pelo Power BI ou outras ferramentas de visualização, fornecendo totais mensais pré-agregados por várias dimensões.
+- **[Ver SQL: Limpeza (Truncate 3 Meses)](sql/dm_1_manifestacao_truncate.md)**
+    - Remove os dados dos últimos 3 meses da tabela `dm_Manifestacao` para evitar duplicação antes da recarga incremental.
+- **[Ver SQL: Carga e Agregação](sql/dm_1_manifestacao_load.md)**
+    - Realiza a leitura do DW, aplica o a janela de tempo e agrega os totais mensais.
 
-## Consulta SQL da Agregação
+### 2. DM Melhorias e Pesquisa
+Processamento complexo para dados de melhorias e respostas textuais.
 
-### Agregação de Manifestações (`dm_Manifestacao`)
-A consulta utiliza CTEs para filtrar, transformar e agrupar os dados.
+- **[Ver SQL: Limpeza (Truncate 3 Meses)](sql/dm_1_melhorias_truncate.md)**
+    - Limpa a tabela alvo `dm_melhorias`.
+- **[Ver SQL: Carga Lógica Complexa](sql/dm_1_melhorias_load.md)**
+    - Script extenso utilizando tabelas temporárias (`#E1`, `#E2`, etc.) para transformar respostas textuais e relacioná-las com perguntas padrão.
 
-```sql
-WITH
-E1 AS
-(
-SELECT
-*
-
-FROM
-medicsys.oc.dw_Manifestacao
-
-WHERE
-Id IS NOT NULL
---------
-/*
-O TRECHO ABAIXO GARANTE QUE APENAS OS ULTIMOS 3 MESES SEJAM ATUALIZADOS,
-PARA TRUNCAR TODA A TABELA, COMENTE A LINHA E MARQUE TRUNCAR NO OUTPUT TABLE NO STEP FINAL
-*/
-AND Criado_Dt >= DATEADD(DAY, 1, EOMONTH(GETDATE(), -4)) -- VOLTA 3 MESES E RETORNA O PRIEMEIRO DIA DO MES RESULTANTE
---------
-
-)
-
-,E2 AS
-(
-SELECT
-Id
-,CAST(CONCAT(LEFT(CAST(Criado_Dt AS DATE),8),'01') AS DATE) AS Data
-,Protocolo
-,TipoAtendimentoManifestacaoId
-,EstabelecimentoId
-,EstabelecimentoEnvioId
-,PerfilManifestacaoId
-,ClassificaoManifestacaoId
-,MotivoManifestacaoId
-,Status
---,TempoResposta
-,EstabelecimentoTratado
-,1 as Total
-
-FROM
-E1
-)
-
-
-,E3 AS
-(
-SELECT
-Data
---,Protocolo
-,TipoAtendimentoManifestacaoId
---,EstabelecimentoId
---,EstabelecimentoEnvioId
-,PerfilManifestacaoId
-,ClassificaoManifestacaoId
-,MotivoManifestacaoId
---,Status
-,EstabelecimentoTratado
-,SUM(Total) AS Total
-
-FROM
-E2
-
-GROUP BY
-Data
---,Protocolo
-,TipoAtendimentoManifestacaoId
---,EstabelecimentoId
---,EstabelecimentoEnvioId
-,PerfilManifestacaoId
-,ClassificaoManifestacaoId
-,MotivoManifestacaoId
---,Status
-,EstabelecimentoTratado
-)
-
-
--- ACRESCENTA O STAMP DE ATUALIZAÇÃO DA LINHA
-SELECT
-Data
-,TipoAtendimentoManifestacaoId
-,PerfilManifestacaoId
-,ClassificaoManifestacaoId
-,MotivoManifestacaoId
-,EstabelecimentoTratado
-,Total
-,GETDATE() AS stamp
-
-FROM
-E3
-```
 
 
