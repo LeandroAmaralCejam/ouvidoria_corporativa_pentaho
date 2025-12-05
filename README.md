@@ -1,41 +1,42 @@
 # Ouvidoria Corporativa - ETL Pentaho
 
-This project contains the ETL (Extract, Transform, Load) processes for the "Ouvidoria Corporativa" system, implemented using **Pentaho Data Integration (PDI)**.
+Este projeto contém os processos de ETL (Extração, Transformação, Carga) para o sistema de "Ouvidoria Corporativa", implementados utilizando **Pentaho Data Integration (PDI)**.
 
-## Project Overview
-The main goal of this project is to consolidate data from various sources (MySQL operational databases, Excel files) into a Data Warehouse and subsequently a Data Mart to support Business Intelligence dashboards.
+## Visão Geral do Projeto
+O objetivo principal deste projeto é consolidar dados de várias fontes (bancos de dados operacionais MySQL, arquivos Excel) em um Data Warehouse e subsequentemente em um Data Mart para suportar dashboards de Business Intelligence.
 
-## Setup & Installation
+## Configuração e Instalação
 
-To set up the project locally, clone the repository to the production directory using the following command:
+Para configurar o projeto localmente, clone o repositório no diretório de produção usando o seguinte comando:
 
 ```bash
-git clone https://github.com/LeandroAmaralCejam/ouvidoria_corporativa_pentaho.git C:\github\prod\ouvidoria_corporativa
+git clone https://github.com/LeandroAmaralCejam/ouvidoria_corporativa_pentaho.git C:\github\prod\ouvidoria_corporativa_pentaho
 ```
 
 > [!NOTE]
-> Ensure that the destination folder `C:\github\prod\ouvidoria_corporativa` does not exist before running the clone command, or is empty.
+> Certifique-se de que a pasta de destino `C:\github\prod\ouvidoria_corporativa_pentaho` não exista antes de executar o comando de clone, ou esteja vazia.
 
-## ETL Architecture
+## Arquitetura ETL
 
-The ETL process is divided into logical stages, each responsible for a specific part of the data pipeline.
+O processo de ETL é dividido em estágios lógicos, cada um responsável por uma parte específica do pipeline de dados.
 
-### 1. Stage 1: Operational Data Extraction
-- **Source:** MySQL (`cejam` schema)
-- **Destination:** SQL Server Staging Area
-- **Details:** [View Technical Documentation](docs/stage_1.md)
+### 1. Estágio 1: Extração de Dados Operacionais
+- **Origem:** MySQL (schema `cejam`)
+- **Destino:** Área de Staging SQL Server
+- **Detalhes:** [Ver Documentação Técnica](docs/stage_1.md)
 
-### 2. Stage 2: Auxiliary Data Extraction
-- **Source:** Excel Files (Sharepoint/Network Drive)
-- **Destination:** SQL Server Staging Area
-- **Details:** [View Technical Documentation](docs/stage_2.md)
+### 2. Estágio 2: Extração de Dados Auxiliares
+- **Origem:** Arquivos Excel (Sharepoint/Drive de Rede)
+- **Destino:** Área de Staging SQL Server
+- **Detalhes:** [Ver Documentação Técnica](docs/stage_2.md)
 
-### 3. Data Warehouse (DW) Transformation
-- **Source:** Staging Area
-- **Destination:** Data Warehouse (`medicsys.oc`)
-- **Details:** [View Technical Documentation](docs/dw_1.md)
+### 3. Transformação Data Warehouse (DW)
+- **Origem:** Área de Staging
+- **Destino:** Data Warehouse (`medicsys.oc`)
+- **Detalhes:** [Ver Documentação Técnica](docs/dw_1.md)
 
-### 4. Data Mart (DM) Aggregation
-- **Source:** Data Warehouse
-- **Destination:** Data Mart (Aggregated Tables)
-- **Details:** [View Technical Documentation](docs/dm_1.md)
+### 4. Agregação Data Mart (DM)
+- **Origem:** Data Warehouse
+- **Destino:** Data Mart (Tabelas Agregadas)
+- **Detalhes:** [Ver Documentação Técnica](docs/dm_1.md)
+
