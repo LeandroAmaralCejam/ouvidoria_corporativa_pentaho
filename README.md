@@ -10,11 +10,11 @@ O objetivo principal deste projeto é consolidar dados de várias fontes (bancos
 Para configurar o projeto localmente, clone o repositório no diretório de produção usando o seguinte comando:
 
 ```bash
-git clone https://github.com/LeandroAmaralCejam/ouvidoria_corporativa_pentaho.git C:\github\prod\ouvidoria_corporativa_pentaho
+git clone https://github.com/LeandroAmaralCejam/ouvidoria_corporativa.git C:\github\prod\ouvidoria_corporativa
 ```
 
 > [!NOTE]
-> Certifique-se de que a pasta de destino `C:\github\prod\ouvidoria_corporativa_pentaho` não exista antes de executar o comando de clone, ou esteja vazia.
+> Certifique-se de que a pasta de destino `C:\github\prod\ouvidoria_corporativa` não exista antes de executar o comando de clone, ou esteja vazia.
 
 ## Arquitetura ETL
 
